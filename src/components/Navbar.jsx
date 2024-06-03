@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import LogoImg from '../utils/Images/Logo.png';
 import { NavLink } from 'react-router-dom';
@@ -50,22 +50,26 @@ const NavLogo = styled.div`
 `;
 const Logo = styled.img`
   height: 50px;
+  @media screen and (max-width: 768px) {
+    height: 30px;
+  }
 `;
 const NavItems = styled.ul`
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: right;
   gap: 32px;
   padding: 0 6px;
   list-style: none;
-  @media screen and (max-width: 1163px) {
+  @media screen and (max-width: 768px) {
     display: none;
   }
 `;
 const Navlink = styled(NavLink)`
   display: flex;
   align-items: center;
+
   color: ${({ theme }) => theme.text_primary};
   font-weight: 500;
   cursor: pointer;
@@ -121,7 +125,7 @@ const MobileMenu = styled.ul`
   list-style: none;
   width: 80%;
   padding: 12px 40px 24px 40px;
-  background: ${({ theme }) => theme.card_light + 99};
+  background: ${({ theme }) => theme.bg};
   position: absolute;
   top: 80px;
   right: 0;
@@ -129,7 +133,7 @@ const MobileMenu = styled.ul`
   transform: ${({ isOpen }) =>
     isOpen ? 'translateY(0)' : 'translateY(-100%)'};
   border-radius: 0 0 20px 20px;
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+  /*  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2); */
   opacity: ${({ isOpen }) => (isOpen ? '100%' : '0')};
   z-index: ${({ isOpen }) => (isOpen ? '1000' : '-1000')};
 `;
@@ -148,6 +152,7 @@ const TextButton = styled.div`
 const Navbar = ({ openAuth, setOpenAuth, currentUser }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
+
   return (
     <Nav>
       <NavbarContainer>

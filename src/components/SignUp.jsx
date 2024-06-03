@@ -13,7 +13,7 @@ const Container = styled.div`
   max-width: 500px;
   display: flex;
   flex-direction: column;
-  gap: 36px;
+  gap: 15px;
 `;
 
 const Title = styled.div`

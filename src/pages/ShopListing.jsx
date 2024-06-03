@@ -4,28 +4,35 @@ import styled from 'styled-components';
 import { category, filter } from '../utils/data';
 import { CircularProgress, Slider } from '@mui/material';
 import { getAllProducts } from '../api';
+import { useSearchParams } from 'react-router-dom';
 
 const Container = styled.div`
   padding: 20px 30px;
-  height: 100vh;
   overflow-y: hidden;
   display: flex;
-  align-items: center;
+  align-items: top;
   gap: 30px;
   @media (max-width: 768px) {
     padding: 20px 12px;
     flex-direction: column;
-    overflow-y: scroll;
   }
   background: ${({ theme }) => theme.bg};
 `;
+const FilterOuterContainer = styled.div`
+  @media (min-width: 768px) {
+    height: 100vh;
+    width: 230px;
+  }
+`;
+
 const Filters = styled.div`
   width: 100%;
   height: fit-content;
   overflow-y: hidden;
   padding: 20px 16px;
   @media (min-width: 768px) {
-    height: 100%;
+    position: fixed;
+    height: 80vh;
     width: 230px;
     overflow-y: scroll;
   }
@@ -51,7 +58,7 @@ const Products = styled.div`
   height: fit-content;
   @media (min-width: 768px) {
     width: 100%;
-    overflow-y: scroll;
+
     height: 100%;
   }
 `;
@@ -94,17 +101,22 @@ const ShopListing = () => {
   const [loading, setLoading] = useState(false);
   const [products, setProducts] = useState([]);
   const [priceRange, setPriceRange] = useState([0, 1000]);
-  const [selectedSizes, setSelectedSizes] = useState(['S', 'M', 'L', 'XL']); // Default selected sizes
-  const [selectedCategories, setSelectedCategories] = useState([
-    'Men',
-    'Women',
-    'Kids',
-    'Bags',
-  ]); // Default selected categories
+  const [selectedSizes, setSelectedSizes] = useState([]); // Default selected sizes
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [searchParams, setSearchParams] = useSearchParams(); // Default selected categories
+
+  useEffect(() => {
+    searchParams.get('category') &&
+      setSelectedCategories([
+        ...selectedCategories,
+        searchParams.get('category'),
+      ]);
+  }, []);
 
   const getFilteredProductsData = async () => {
     setLoading(true);
     // Call the API function for filtered products
+
     await getAllProducts(
       `minPrice=${priceRange[0]}&maxPrice=${priceRange[1]}${
         selectedSizes.length > 0 ? `&sizes=${selectedSizes.join(',')}` : ''
@@ -128,71 +140,73 @@ const ShopListing = () => {
         <CircularProgress />
       ) : (
         <>
-          <Filters>
-            <Menu>
-              {filter.map((filters) => (
-                <FilterSection>
-                  <Title>{filters.name}</Title>
-                  {filters.value === 'price' ? (
-                    <>
-                      <Slider
-                        aria-label="Price"
-                        defaultValue={priceRange}
-                        min={0}
-                        max={1000}
-                        valueLabelDisplay="auto"
-                        marks={[
-                          { value: 0, label: '$0' },
-                          { value: 1000, label: '$1000' },
-                        ]}
-                        onChange={(e, newValue) => setPriceRange(newValue)}
-                      />
-                    </>
-                  ) : filters.value === 'size' ? (
-                    <Item>
-                      {filters.items.map((item) => (
-                        <SelectableItem
-                          key={item}
-                          selected={selectedSizes.includes(item)}
-                          onClick={() =>
-                            setSelectedSizes((prevSizes) =>
-                              prevSizes.includes(item)
-                                ? prevSizes.filter(
-                                    (category) => category !== item
-                                  )
-                                : [...prevSizes, item]
-                            )
-                          }
-                        >
-                          {item}
-                        </SelectableItem>
-                      ))}
-                    </Item>
-                  ) : filters.value === 'category' ? (
-                    <Item>
-                      {filters.items.map((item) => (
-                        <SelectableItem
-                          key={item}
-                          selected={selectedCategories.includes(item)}
-                          onClick={() =>
-                            setSelectedCategories((prevCategories) =>
-                              prevCategories.includes(item)
-                                ? prevCategories.filter(
-                                    (category) => category !== item
-                                  )
-                                : [...prevCategories, item]
-                            )
-                          }
-                        >
-                          {item}
-                        </SelectableItem>
-                      ))}
-                    </Item>
-                  ) : null}
-                </FilterSection>
-              ))}
-            </Menu>
-          </Filters>
+          <FilterOuterContainer>
+            <Filters>
+              <Menu>
+                {filter.map((filters) => (
+                  <FilterSection>
+                    <Title>{filters.name}</Title>
+                    {filters.value === 'price' ? (
+                      <>
+                        <Slider
+                          aria-label="Price"
+                          defaultValue={priceRange}
+                          min={0}
+                          max={1000}
+                          valueLabelDisplay="auto"
+                          marks={[
+                            { value: 0, label: '$0' },
+                            { value: 1000, label: '$1000' },
+                          ]}
+                          onChange={(e, newValue) => setPriceRange(newValue)}
+                        />
+                      </>
+                    ) : filters.value === 'size' ? (
+                      <Item>
+                        {filters.items.map((item) => (
+                          <SelectableItem
+                            key={item}
+                            selected={selectedSizes.includes(item)}
+                            onClick={() =>
+                              setSelectedSizes((prevSizes) =>
+                                prevSizes.includes(item)
+                                  ? prevSizes.filter(
+                                      (category) => category !== item
+                                    )
+                                  : [...prevSizes, item]
+                              )
+                            }
+                          >
+                            {item}
+                          </SelectableItem>
+                        ))}
+                      </Item>
+                    ) : filters.value === 'category' ? (
+                      <Item>
+                        {filters.items.map((item) => (
+                          <SelectableItem
+                            key={item}
+                            selected={selectedCategories.includes(item)}
+                            onClick={() =>
+                              setSelectedCategories((prevCategories) =>
+                                prevCategories.includes(item)
+                                  ? prevCategories.filter(
+                                      (category) => category !== item
+                                    )
+                                  : [...prevCategories, item]
+                              )
+                            }
+                          >
+                            {item}
+                          </SelectableItem>
+                        ))}
+                      </Item>
+                    ) : null}
+                  </FilterSection>
+                ))}
+              </Menu>
+            </Filters>
+          </FilterOuterContainer>
           <Products>
             <CardWrapper>
               {products?.map((product) => (

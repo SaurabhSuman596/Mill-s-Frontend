@@ -465,9 +465,11 @@ const Admin = () => {
           <ListItem
             alignItems="flex-start"
             sx={{
+              width: '100%',
               maxHeight: '100px',
               marginBottom: '20px',
               bgcolor: lightTheme.menu_primary_text,
+              flexWrap: 'wrap',
             }}
             key={item?._id}
           >

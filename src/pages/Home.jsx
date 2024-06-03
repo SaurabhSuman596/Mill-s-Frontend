@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import HeaderImage from "../utils/Images/Header.png";
-import { category } from "../utils/data";
-import ProductCategoryCard from "../components/cards/ProductCategoryCard";
-import ProductCard from "../components/cards/ProductCard";
-import { getAllProducts } from "../api";
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import HeaderImage from '../utils/Images/Header.webp';
+import { category } from '../utils/data';
+import ProductCategoryCard from '../components/cards/ProductCategoryCard';
+import ProductCard from '../components/cards/ProductCard';
+import { getAllProducts } from '../api';
 
 const Container = styled.div`
-  padding: 20px 30px;
+  padding: 0px 30px 20px 30px;
   padding-bottom: 200px;
   height: 100%;
   overflow-y: scroll;
@@ -22,15 +22,14 @@ const Container = styled.div`
 `;
 const Section = styled.div`
   max-width: 1400px;
-  padding: 32px 16px;
+  padding: 0px 16px 32px 16px;
   display: flex;
   flex-direction: column;
   gap: 28px;
 `;
 const Img = styled.img`
-  width: 90%;
-  height: 700px;
-  object-fit: cover;
+  width: 100%;
+  object-fit: contain;
   max-width: 1200px;
 `;
 
@@ -38,7 +37,7 @@ const Title = styled.div`
   font-size: 28px;
   font-weight: 500;
   display: flex;
-  justify-content: ${({ center }) => (center ? "center" : "space-between")};
+  justify-content: ${({ center }) => (center ? 'center' : 'space-between')};
   align-items: center;
 `;
 
@@ -71,7 +70,7 @@ const Home = () => {
     <Container>
       <Section
         style={{
-          alignItems: "center",
+          alignItems: 'center',
         }}
       >
         <Img src={HeaderImage} />

@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import TextInput from "./TextInput";
-import Button from "./Button";
-import { UserSignIn } from "../api";
-import { useDispatch } from "react-redux";
-import { loginSuccess } from "../redux/reducers/userSlice";
-import { openSnackbar } from "../redux/reducers/snackbarSlice";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import TextInput from './TextInput';
+import Button from './Button';
+import { UserSignIn } from '../api';
+import { useDispatch } from 'react-redux';
+import { loginSuccess } from '../redux/reducers/userSlice';
+import { openSnackbar } from '../redux/reducers/snackbarSlice';
 
 const Container = styled.div`
   width: 100%;
@@ -37,16 +37,16 @@ const TextButton = styled.div`
   }
 `;
 
-const SignIn = () => {
+const SignIn = ({ setOpenAuth }) => {
   const dispatch = useDispatch();
   const [buttonLoading, setButtonLoading] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const validateInputs = () => {
     if (!email || !password) {
-      alert("Please fill in all fields");
+      alert('Please fill in all fields');
       return false;
     }
     return true;
@@ -61,10 +61,11 @@ const SignIn = () => {
           dispatch(loginSuccess(res.data));
           dispatch(
             openSnackbar({
-              message: "Login Successful",
-              severity: "success",
+              message: 'Login Successful',
+              severity: 'success',
             })
           );
+          setOpenAuth(false);
         })
         .catch((err) => {
           if (err.response) {
@@ -74,7 +75,7 @@ const SignIn = () => {
             dispatch(
               openSnackbar({
                 message: err.response.data.message,
-                severity: "error",
+                severity: 'error',
               })
             );
           } else {
@@ -83,7 +84,7 @@ const SignIn = () => {
             dispatch(
               openSnackbar({
                 message: err.message,
-                severity: "error",
+                severity: 'error',
               })
             );
           }
@@ -96,10 +97,10 @@ const SignIn = () => {
   return (
     <Container>
       <div>
-        <Title>Welcome to Krist 👋</Title>
+        <Title>Welcome to Mill's Fashion </Title>
         <Span>Please login with your details here</Span>
       </div>
-      <div style={{ display: "flex", gap: "20px", flexDirection: "column" }}>
+      <div style={{ display: 'flex', gap: '20px', flexDirection: 'column' }}>
         <TextInput
           label="Email Address"
           placeholder="Enter your email address"

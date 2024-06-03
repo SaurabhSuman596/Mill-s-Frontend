@@ -1,11 +1,11 @@
-import { Modal } from "@mui/material";
-import React, { useState } from "react";
-import styled from "styled-components";
-import LogoImage from "../utils/Images/Logo.png";
-import AuthImage from "../utils/Images/AuthImage.png";
-import { Close } from "@mui/icons-material";
-import SignIn from "../components/SignIn";
-import SignUp from "../components/SignUp";
+import { Modal } from '@mui/material';
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import LogoImage from '../utils/Images/Logo.png';
+import AuthImage from '../utils/Images/AuthImage.avif';
+import { Close } from '@mui/icons-material';
+import SignIn from '../components/SignIn';
+import SignUp from '../components/SignUp';
 
 const Container = styled.div`
   flex: 1;
@@ -24,14 +24,16 @@ const Left = styled.div`
 const Logo = styled.img`
   position: absolute;
   top: 40px;
-  left: 60px;
+  right: 60px;
   z-index: 10;
+  height: 30px;
 `;
 const Image = styled.img`
   position: relative;
   height: 100%;
   width: 100%;
   object-fit: cover;
+  object-position: top;
 `;
 
 const Right = styled.div`
@@ -100,8 +102,8 @@ const Authentication = ({ openAuth, setOpenAuth }) => {
             <>
               <SignIn setOpenAuth={setOpenAuth} />
               <Text>
-                {" "}
-                Don't have an account ?{" "}
+                {' '}
+                Don't have an account ?{' '}
                 <TextButton onClick={() => setLogin(false)}>Sign Up</TextButton>
               </Text>
             </>
@@ -109,7 +111,7 @@ const Authentication = ({ openAuth, setOpenAuth }) => {
             <>
               <SignUp setOpenAuth={setOpenAuth} />
               <Text>
-                Already have an account ?{" "}
+                Already have an account ?{' '}
                 <TextButton onClick={() => setLogin(true)}>Sign In</TextButton>
               </Text>
             </>

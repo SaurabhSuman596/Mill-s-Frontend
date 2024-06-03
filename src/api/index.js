@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: 'https://mill-s-backend-production.up.railway.app/',
+  baseURL:
+    'https://mill-s-backend-production.up.railway.app/api/' /* 'http://localhost:8080/api/' */,
 });
 
 export const UserSignUp = async (data) => await API.post('/user/signup', data);

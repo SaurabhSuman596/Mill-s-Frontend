@@ -2,7 +2,7 @@ import { Modal } from '@mui/material';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import LogoImage from '../utils/Images/Logo.png';
-import AuthImage from '../utils/Images/AuthImage.avif';
+import AuthImage from '../utils/Images/AuthImage.webp';
 import { Close } from '@mui/icons-material';
 import SignIn from '../components/SignIn';
 import SignUp from '../components/SignUp';

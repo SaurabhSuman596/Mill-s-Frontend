@@ -13,7 +13,7 @@ import {
   deleteFromFavourite,
   getFavourite,
 } from '../../api';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { openSnackbar } from '../../redux/reducers/snackbarSlice';
 
 const Card = styled.div`
@@ -137,25 +137,32 @@ const ProductCard = ({ product }) => {
   const navigate = useNavigate();
   const [favorite, setFavorite] = useState(false);
   const [favoriteLoading, setFavoriteLoading] = useState(false);
+  const user = useSelector((state) => state.user);
+
+  useEffect(() => {
+    checkFavourite();
+  }, []);
 
   const addFavorite = async () => {
-    setFavoriteLoading(true);
-    const token = localStorage.getItem("mill's-fashion");
-    console.log(product);
-    await addToFavourite(token, { productID: product?._id })
-      .then((res) => {
-        setFavorite(true);
-        setFavoriteLoading(false);
-      })
-      .catch((err) => {
-        setFavoriteLoading(false);
-        dispatch(
-          openSnackbar({
-            message: err.message,
-            severity: 'error',
-          })
-        );
-      });
+    if (user?.currentUser?._id) {
+      setFavoriteLoading(true);
+      const token = localStorage.getItem("mill's-fashion");
+
+      await addToFavourite(token, { productID: product?._id })
+        .then((res) => {
+          setFavorite(true);
+          setFavoriteLoading(false);
+        })
+        .catch((err) => {
+          setFavoriteLoading(false);
+          dispatch(
+            openSnackbar({
+              message: err.message,
+              severity: 'error',
+            })
+          );
+        });
+    }
   };
   const removeFavorite = async () => {
     setFavoriteLoading(true);
@@ -195,9 +202,7 @@ const ProductCard = ({ product }) => {
     const token = localStorage.getItem("mill's-fashion");
     await getFavourite(token, { productId: product?._id })
       .then((res) => {
-        const isFavorite = res.data?.some(
-          (favorite) => favorite._id === product?._id
-        );
+        const isFavorite = res.data?.includes(product?._id);
         setFavorite(isFavorite);
         setFavoriteLoading(false);
       })
@@ -219,28 +224,31 @@ const ProductCard = ({ product }) => {
     <Card>
       <Top>
         <Image src={product?.img} />
-        <Menu>
-          <MenuItem
-            onClick={() => (favorite ? removeFavorite() : addFavorite())}
-          >
-            {favoriteLoading ? (
-              <CircularProgress sx={{ fontSize: '20px' }} />
-            ) : (
-              <>
-                {favorite ? (
-                  <FavoriteRounded sx={{ fontSize: '20px', color: 'red' }} />
-                ) : (
-                  <FavoriteBorder sx={{ fontSize: '20px' }} />
-                )}
-              </>
-            )}
-          </MenuItem>{' '}
-          <MenuItem onClick={() => addCart(product?.id)}>
-            <AddShoppingCartOutlined
-              sx={{ color: 'inherit', fontSize: '20px' }}
-            />
-          </MenuItem>
-        </Menu>
+        {user?.currentUser?._id && (
+          <Menu>
+            <MenuItem
+              onClick={() => (favorite ? removeFavorite() : addFavorite())}
+            >
+              {favoriteLoading ? (
+                <CircularProgress sx={{ fontSize: '20px' }} />
+              ) : (
+                <>
+                  {favorite ? (
+                    <FavoriteRounded sx={{ fontSize: '20px', color: 'red' }} />
+                  ) : (
+                    <FavoriteBorder sx={{ fontSize: '20px' }} />
+                  )}
+                </>
+              )}
+            </MenuItem>{' '}
+            <MenuItem onClick={() => addCart(product?.id)}>
+              <AddShoppingCartOutlined
+                sx={{ color: 'inherit', fontSize: '20px' }}
+              />
+            </MenuItem>
+          </Menu>
+        )}
+
         <Rate>
           <Rating value={3.5} sx={{ fontSize: '14px' }} />
         </Rate>
@@ -249,8 +257,9 @@ const ProductCard = ({ product }) => {
         <Title>{product?.title}</Title>
         <Desc>{product?.name}</Desc>
         <Price>
-          ${product?.price?.org} <Span>${product?.price?.mrp}</Span>
-          <Percent>${product?.price?.off}% Off</Percent>
+          &#8377; {product?.price?.org}{' '}
+          <Span>&#8377; {product?.price?.mrp}</Span>
+          <Percent>&#8377; {product?.price?.off} Off</Percent>
         </Price>
       </Details>
     </Card>

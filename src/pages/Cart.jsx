@@ -13,7 +13,6 @@ const Container = styled.div`
   padding: 20px 30px;
   padding-bottom: 200px;
   height: 100%;
-  overflow-y: scroll;
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -212,7 +211,6 @@ const Cart = () => {
   };
 
   const PlaceOrder = async () => {
-    setButtonLoad(true);
     try {
       const isDeliveryDetailsFilled =
         deliveryDetails.firstName &&
@@ -231,7 +229,8 @@ const Cart = () => {
         );
         return;
       }
-      const token = localStorage.getItem('krist-app-token');
+      setButtonLoad(true);
+      const token = localStorage.getItem("mill's-fashion");
       const totalAmount = calculateSubtotal().toFixed(2);
       const orderDetails = {
         products,
@@ -248,6 +247,7 @@ const Cart = () => {
           severity: 'success',
         })
       );
+      alert('Order Place Successfully!');
       setButtonLoad(false);
       // Clear the cart and update the UI
       setReload(!reload);
@@ -414,19 +414,56 @@ const Cart = () => {
                   </div>
                 </Delivery>
                 <Delivery>
-                  Payment Details:
+                  Payment Details: Please do not put you real card details ,
+                  This is a demo website
                   <div>
-                    <TextInput small placeholder="Card Number" />
+                    <TextInput
+                      handelChange={(e) =>
+                        setDeliveryDetails({
+                          ...deliveryDetails,
+                          cardNumber: e.target.value,
+                        })
+                      }
+                      small
+                      placeholder="Card Number"
+                    />
                     <div
                       style={{
                         display: 'flex',
                         gap: '6px',
                       }}
                     >
-                      <TextInput small placeholder="Expiry Date" />
-                      <TextInput small placeholder="CVV" />
+                      <TextInput
+                        handelChange={(e) =>
+                          setDeliveryDetails({
+                            ...deliveryDetails,
+                            expieryDate: e.target.value,
+                          })
+                        }
+                        small
+                        placeholder="Expiry Date"
+                      />
+                      <TextInput
+                        handelChange={(e) =>
+                          setDeliveryDetails({
+                            ...deliveryDetails,
+                            CVV: e.target.value,
+                          })
+                        }
+                        small
+                        placeholder="CVV"
+                      />
                     </div>
-                    <TextInput small placeholder="Card Holder name" />
+                    <TextInput
+                      handelChange={(e) =>
+                        setDeliveryDetails({
+                          ...deliveryDetails,
+                          cardHolderName: e.target.value,
+                        })
+                      }
+                      small
+                      placeholder="Card Holder name"
+                    />
                   </div>
                 </Delivery>
                 <Button

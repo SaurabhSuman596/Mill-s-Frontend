@@ -37,7 +37,7 @@ const MenuProps = {
 function getStyles(categoryList, category, theme) {
   return {
     fontWeight:
-      category.indexOf(categoryList) === -1
+      category?.indexOf(categoryList) === -1
         ? theme.typography.fontWeightRegular
         : theme.typography.fontWeightMedium,
   };
@@ -154,6 +154,8 @@ const Admin = () => {
   };
 
   const handleModelSubmitButton = async () => {
+    console.log(product);
+    setSubmitButtonClicked(true);
     let validateValue = true;
     setLoading(true);
     setButtonDisabled(true);
@@ -176,6 +178,19 @@ const Admin = () => {
             setOpen(false);
             setUpdateProduct(false);
             getProducts();
+            setProduct({
+              title: '',
+              name: '',
+              desc: '',
+              img: '',
+              price: {
+                org: 0,
+                mrp: 0,
+                off: 0,
+              },
+              sizes: [],
+              category: [],
+            });
           })
           .catch((err) => {
             setLoading(false);
@@ -191,6 +206,19 @@ const Admin = () => {
             setButtonDisabled(false);
             setOpen(false);
             getProducts();
+            setProduct({
+              title: '',
+              name: '',
+              desc: '',
+              img: '',
+              price: {
+                org: 0,
+                mrp: 0,
+                off: 0,
+              },
+              sizes: [],
+              category: [],
+            });
           })
           .catch((err) => {
             setLoading(false);
@@ -303,7 +331,7 @@ const Admin = () => {
           <TextInput
             label="Original Price"
             placeholder="Original Price"
-            value={product?.price.org}
+            value={product?.price?.org}
             handelChange={(e) =>
               setProduct(
                 (e = {
@@ -316,7 +344,7 @@ const Admin = () => {
               )
             }
             error={
-              !product.price.org && submitButtonClicked
+              !product?.price?.org && submitButtonClicked
                 ? 'Please add original price'
                 : ''
             }
@@ -324,20 +352,20 @@ const Admin = () => {
           <TextInput
             label="Mrp Price"
             placeholder="Mrp Price"
-            value={product?.price.mrp}
+            value={product?.price?.mrp}
             handelChange={(e) =>
               setProduct(
                 (e = {
                   ...product,
                   price: {
-                    ...product.price,
+                    ...product?.price,
                     mrp: e.target.value,
                   },
                 })
               )
             }
             error={
-              !product.price.mrp && submitButtonClicked
+              !product.price?.mrp && submitButtonClicked
                 ? 'Please add Market Price (MRP)'
                 : ''
             }
@@ -345,20 +373,20 @@ const Admin = () => {
           <TextInput
             label="Off Price"
             placeholder="Off Price"
-            value={product?.price.off}
+            value={product?.price?.off}
             handelChange={(e) =>
               setProduct(
                 (e = {
                   ...product,
                   price: {
-                    ...product.price,
+                    ...product?.price,
                     off: e.target.value,
                   },
                 })
               )
             }
             error={
-              !product.price.off && submitButtonClicked
+              !product.price?.off && submitButtonClicked
                 ? 'Please add Discount Price'
                 : ''
             }
@@ -377,7 +405,7 @@ const Admin = () => {
             }
           />
           <Typography>Size</Typography>
-          {product.sizes.length === 0 && submitButtonClicked ? (
+          {product.sizes?.length === 0 && submitButtonClicked ? (
             <Label error={'Please select any sizes'}>
               Please select any sizes
             </Label>
@@ -387,32 +415,59 @@ const Admin = () => {
 
           <FormGroup sx={{ display: 'inline' }}>
             <FormControlLabel
-              control={<Checkbox defaultChecked={product?.sizes[0] && true} />}
+              control={
+                <Checkbox
+                  defaultChecked={product?.sizes && product?.sizes[0] && true}
+                />
+              }
               label="S"
               onClick={(e) => handleproductSize(e, 'S')}
             />
             <FormControlLabel
-              control={<Checkbox defaultChecked={product?.sizes[1] && true} />}
+              control={
+                <Checkbox
+                  defaultChecked={product?.sizes && product?.sizes[1] && true}
+                />
+              }
               label="M"
               onClick={(e) => handleproductSize(e, 'M')}
             />
             <FormControlLabel
-              control={<Checkbox defaultChecked={product?.sizes[2] && true} />}
+              control={
+                <Checkbox
+                  defaultChecked={product?.sizes && product?.sizes[2] && true}
+                />
+              }
               label="L"
               onClick={(e) => handleproductSize(e, 'L')}
             />
             <FormControlLabel
-              control={<Checkbox defaultChecked={product?.sizes[3] && true} />}
+              control={
+                <Checkbox
+                  defaultChecked={product?.sizes && product?.sizes[3] && true}
+                />
+              }
               label="XL"
               onClick={(e) => handleproductSize(e, 'XL')}
             />
             <FormControlLabel
-              control={<Checkbox defaultChecked={product?.sizes[4] && true} />}
+              control={
+                <Checkbox
+                  defaultChecked={product?.sizes && product?.sizes[4] && true}
+                />
+              }
               label="XLL"
               onClick={(e) => handleproductSize(e, 'XLL')}
             />
           </FormGroup>
           <Typography sx={{ marginBottom: '10px' }}>Category</Typography>
+          {product.category?.length === 0 && submitButtonClicked ? (
+            <Label error={'Please select atleast 1 category'}>
+              Please select any sizes
+            </Label>
+          ) : (
+            ''
+          )}
           <FormControl sx={{ width: 300 }}>
             <InputLabel id="demo-multiple-name-label">Category</InputLabel>
             <Select
@@ -424,11 +479,11 @@ const Admin = () => {
               input={<OutlinedInput label="Categories" />}
               MenuProps={MenuProps}
             >
-              {categories.map((category) => (
+              {categories?.map((category) => (
                 <MenuItem
                   key={category}
                   value={category}
-                  style={getStyles(categories, product.category, theme)}
+                  style={getStyles(categories, product?.category, theme)}
                 >
                   {category}
                 </MenuItem>

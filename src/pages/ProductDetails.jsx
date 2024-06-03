@@ -240,8 +240,9 @@ const ProductDetails = () => {
             </div>
             <Rating value={3.5} />
             <Price>
-              ${product?.price?.org} <Span>${product?.price?.mrp}</Span>{' '}
-              <Percent> (${product?.price?.off}% Off) </Percent>
+              &#8377;{product?.price?.org}{' '}
+              <Span> &#8377;{product?.price?.mrp}</Span>{' '}
+              <Percent> ( &#8377;{product?.price?.off} Off) </Percent>
             </Price>
             <Desc>{product?.desc}</Desc>
             <Sizes>
@@ -264,7 +265,7 @@ const ProductDetails = () => {
                 isLoading={cartLoading}
                 onClick={() => addCart()}
               />
-              <Button text="Buy Now" full />
+              <Button text="Buy Now" full onClick={() => addCart()} />
               <Button
                 leftIcon={
                   favorite ? (

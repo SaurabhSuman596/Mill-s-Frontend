@@ -167,7 +167,7 @@ const Navbar = ({ openAuth, setOpenAuth, currentUser }) => {
         <NavItems>
           <Navlink to="/">Home</Navlink>
           <Navlink to="/Shop">Shop</Navlink>
-          <Navlink to="/Orders">Orders</Navlink>
+          {/*   <Navlink to="/Orders">Orders</Navlink> */}
           {currentUser?.isAdmin ? <Navlink to="/Admin">Admin</Navlink> : null}
         </NavItems>
 
